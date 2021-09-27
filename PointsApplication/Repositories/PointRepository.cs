@@ -1,8 +1,7 @@
-﻿using PointsApplication.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PointsApplication.Data;
 using PointsApplication.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PointsApplication.Repositories
@@ -14,14 +13,26 @@ namespace PointsApplication.Repositories
         {
             _context = context;
         }
-        public List<CustomPoint> Get()
+        public async Task<List<CustomPoint>> GetAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Points.ToListAsync();
         }
-        public List<CustomPoint> GetById()
+        public async Task<CustomPoint> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Points.FirstOrDefaultAsync(p => p.Id == id);
+
         }
 
+        public async Task AddAsync(CustomPoint point)
+        {
+            _context.Add(point);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(CustomPoint point)
+        {
+            _context.Remove(point);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -1,18 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PointsApplication.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PointsApplication.Repositories;
+using PointsApplication.Services;
 
 namespace PointsApplication
 {
@@ -28,7 +23,10 @@ namespace PointsApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(d => d.UseSqlServer)
+            services.AddDbContext<DataContext>(d =>
+                d.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<PointRepository>();
+            services.AddTransient<PointService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
