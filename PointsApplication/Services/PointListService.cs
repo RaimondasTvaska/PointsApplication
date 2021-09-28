@@ -1,4 +1,5 @@
-﻿using PointsApplication.Entities;
+﻿using PointsApplication.Dtos;
+using PointsApplication.Entities;
 using PointsApplication.Repositories;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,13 @@ namespace PointsApplication.Services
             await _pointListRepository.DeleteAsync(point);
         }
 
-        public async Task CreateAsync(PointList pointList)
+        public async Task CreateAsync(PointListCreationDto pointListDto)
         {
-            await _pointListRepository.CreateAsync(pointList);
+            var entity = new PointList()
+            {
+                Name = pointListDto.Name
+            };
+            await _pointListRepository.CreateAsync(entity);
         }
     }
 }
